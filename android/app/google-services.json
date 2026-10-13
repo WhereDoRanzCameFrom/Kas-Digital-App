@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "142445932334",
+    "project_id": "kas-digital-85",
+    "storage_bucket": "kas-digital-85.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142445932334:android:2a54eed7db47b0588e14bf",
+        "android_client_info": {
+          "package_name": "com.example.kas_digital_85"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDar5CQN5TKEbd_CC1y8qtX1376Q91Ijy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

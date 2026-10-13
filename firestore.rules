@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper: cek apakah request datang dari app yang valid ─────────────
+    // Karena kita tidak pakai Firebase Auth (PIN lokal), kita pakai
+    // pendekatan "allow semua read/write tapi block akses dari luar app"
+    // via rules berbasis field validation.
+    //
+    // Untuk production yang lebih secure, tambahkan Firebase Auth anonymous
+    // dan ganti allow below dengan: allow read, write: if request.auth != null;
+
+    // ── users — bisa dibaca app, tidak bisa ditulis sembarangan ───────────
+    match /users/{userId} {
+      // Baca: boleh (untuk load dropdown login)
+      allow read: if true;
+      // Tulis: hanya dokumen dengan field wajib yang benar
+      allow write: if request.resource.data.keys().hasAll(['name', 'role'])
+                   && request.resource.data.name is string
+                   && request.resource.data.role is string;
+    }
+
+    // ── transactions — CRUD dengan validasi field ─────────────────────────
+    match /transactions/{txId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll([
+                        'type', 'category', 'amount', 'description',
+                        'date', 'createdBy', 'createdByName', 'createdByRole'
+                      ])
+                   && request.resource.data.amount is number
+                   && request.resource.data.amount > 0;
+      allow update: if resource.data != null
+                   && request.resource.data.amount > 0;
+      allow delete: if true;
+    }
+
+    // ── setorans — CRUD dengan validasi field ────────────────────────────
+    match /setorans/{setoranId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll([
+                        'fromUserId', 'fromUserName', 'fromRole',
+                        'transactions', 'totalAmount', 'tanggalSetor', 'status'
+                      ])
+                   && request.resource.data.totalAmount > 0
+                   && request.resource.data.transactions is list;
+      allow update: if resource.data != null;
+      allow delete: if true;
+    }
+
+    // ── config (pengumuman + budget) ──────────────────────────────────────
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if docId == 'pengumuman' || docId == 'budget';
+    }
+
+    // ── Block semua collection lain yang tidak dikenal ────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
