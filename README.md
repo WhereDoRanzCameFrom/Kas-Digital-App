@@ -2,7 +2,7 @@
 
 Kas Digital is a modern, real-time financial tracking and digital bookkeeping application built using Flutter and powered by Firebase. It allows organizations and group projects to manage income, track daily operational expenses, manage contributions, and generate instant financial reports seamlessly.
 
----
+# *Some of this project's code is kept in a private repository for security and copyright reasons.*
 
 ## 🚀 Key Features Overview
 
